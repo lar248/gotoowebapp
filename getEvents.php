@@ -1,4 +1,5 @@
 <?php 
+  //Facebook app configuration
  	require_once("fb-sdk/src/facebook.php");
 	  $config = array(
       'appId' => '275395405958888',
@@ -6,12 +7,13 @@
       'fileUpload' => false, // optional
       'allowSignedRequest' => false, // optional, but should be set to false for non-canvas apps
   	);
+  //create new config variable
   $facebook = new Facebook($config);
-  
+
+//event creator catalog  
 $creators=["CornellHillel","dansmallspresents"];
 
-
-$allEvents=[];
+$allEvents=[]; //event array to be populated
 foreach ($creators as $creator)
 {
 	try {
@@ -19,10 +21,6 @@ foreach ($creators as $creator)
         $enc= $events[data];
         $allEvents=array_merge($allEvents, $enc);
       } catch(FacebookApiException $e) {
-        // If the user is logged out, you can have a 
-        // user ID even though the access token is invalid.
-        // In this case, we'll get an exception, so we'll
-        // just ask the user to login again here.
         echo "ERROR".$e;
       }  
 }

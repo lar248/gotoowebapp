@@ -1,20 +1,47 @@
 
 $( document ).ready( function() {
-    $('.tile').click(function()
+    //on click
+    for (ind in events)
     {
-        console.log("hello!")
+        displayEvent(events[ind]);
+    }
+    scale();
+    $('.tile').click(function(){clicked($(this));});
+});
+//TODOS
+    //HOME PAGE
+        //MAKE SWAP-ATTEND WORK -GRONER
+        //MAKE SWAP-ATTEND RECORD AND PERSIST -GRONER
+        
+    
+        //GET MAP WORKING -LAR
+        //FORMAT TILES -LAR
+            //TICKET FUNCTIONALITY-ICON WRAPPED IN <A> -LAR
+
+    //UI -LAR
+        //NAV BAR -LAR
+        //MAKE CAL UI -GRON
+            //CAL FUNCTIONALITY -GRON
+
+function clicked(curr)
+{
+        //if clicked on status
          if($(event.target).hasClass('status'))
         {
             console.log('statusChange');
             //change attend state
-            swapAttend('001')
+            swapAttend(curr);
         }
          else
+         {
             //expand the tile
-            $(this).children('.details').slideToggle();
-    })
-    
-    function swapAttend(id)
+            var expOne=curr.children('.details');
+            $('.details').not(expOne).slideUp();
+            expOne.slideToggle();
+    }
+}
+
+function swapAttend(id) //GRONER
     {
         var status=$('.'+id).children('.cover').children('.gradient').children('.status');
         var state= status.css("background-image");
@@ -27,12 +54,12 @@ $( document ).ready( function() {
             //if going
             //add id->state
     }
+//get all when page loads
+function getAttend() //GRONER
+{
 
-    for (ind in events)
-    {
-        displayEvent(events[ind]);
-    }
-});
+}
+
 
 function displayEvent(data)
 {
@@ -63,5 +90,13 @@ function displayEvent(data)
         +"</div>");
 
     $("#content").append(newTile)
+}
+
+function showmap() //LARRY
+{
+
+}
+function formatTile() //LARRY
+{
 
 }
