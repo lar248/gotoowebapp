@@ -9,10 +9,7 @@
   	);
   //create new config variable
   $facebook = new Facebook($config);
-
-//event creator catalog  
-$creators=["CornellHillel","dansmallspresents"];
-
+  $creators= explode ("\n", file_get_contents("pages.txt"));
 $allEvents=[]; //event array to be populated
 foreach ($creators as $creator)
 {
