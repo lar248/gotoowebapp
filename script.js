@@ -65,6 +65,41 @@ function displayEvent(data)
 {
     console.log(data);
 
+    // var location
+    var theLocation = "";
+    var theAddress = "";
+
+    if (data.location != "") {
+        theLocation += data.location;
+    } 
+
+    if (data.venue.street != undefined && data.venue.street != "" && data.venue.city != undefined && data.venue.country != undefined) {
+        theAddress += " " +data.venue.street + ", " +data.venue.city + ", " +data.venue.country;
+    } else if (data.venue.street != undefined && data.venue.street != "") {
+        theAddress += " " +data.venue.street;
+    } else if (data.venue.city != undefined && data.venue.country != undefined) {
+        theAddress += " " +data.venue.city + ", " +data.venue.country;
+    } else if (data.venue.city != undefined) {
+        theAddress += " " +data.venue.city;
+    } else if (data.venue.city != undefined) {
+        theAddress += " " +data.venue.country;
+    }
+
+    // // var time
+    var start_time = "";
+    var end_time = "";
+    if (data.start_time != undefined) {
+        start_time = formatTime(data.start_time);
+    }
+    if (data.end_time != undefined) {
+        end_time = formatTime(data.end_time);
+    }
+
+
+    
+
+    //anytime i see something like a link, make it a URL
+
     var newTile=$("<div class='tile "+data.id+"'>"
         +"<div class='cover' style= 'background-image: url("+data.cover.source+");'>"
             +"<div class='gradient'>"
@@ -74,12 +109,12 @@ function displayEvent(data)
         +"</div>"
         +"<div class='lower'>"
             +"<div class='location'>"
-                +"<span class='venue'>"+data.venue+"</span>"
-                +"<span class='location'>"+data.location+"</span>"
+                +"<span class='venue'><u>"+theLocation+"</u></span>"
+                +"<span class='location'>"+theAddress+"</span>"
             +"</div>"
             +"<div class='time'>"
-                +"<span class='from'>"+data.start_time+"</span> to "
-                +"<span class='to'>"+data.end_time+"</span>"
+                +"<span class='from'>"+start_time+"</span> to "
+                +"<span class='to'>"+end_time+"</span>"
             +"</div>"
         +"</div>"
         +"<div class='details'>"
@@ -96,7 +131,15 @@ function showmap() //LARRY
 {
 
 }
-function formatTile() //LARRY
-{
+
+function formatTime(time) { //LARRY
+    console.log(time);
+    var result = time.split("-");
+    console.log(result);
+
+    //TODO
+        //format the content to look like 04/17 @ 7pm
+
+    return result[1];
 
 }

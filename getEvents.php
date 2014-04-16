@@ -15,6 +15,7 @@ foreach ($creators as $creator)
 {
 	try {
         $events = $facebook->api('/'.$creator.'/events?fields=id,owner,name,updated_time,cover,description,start_time,end_time,venue,location,ticket_uri,cover&since=now&limit=5000','GET');
+        
         $enc= $events[data];
         $allEvents=array_merge($allEvents, $enc);
       } catch(FacebookApiException $e) {
