@@ -85,20 +85,24 @@ function displayEvent(data)
         theAddress += " " +data.venue.country;
     }
 
-    // // var time
+    // var time
     var start_time = "";
     var end_time = "";
     if (data.start_time != undefined) {
         start_time = formatTime(data.start_time);
     }
     if (data.end_time != undefined) {
-        end_time = formatTime(data.end_time);
+        end_time = " to " + formatTime(data.end_time);
     }
 
+    //anytime I see something like a link, make it a URL in the content
+    console.log(data.description);
 
-    
-
-    //anytime i see something like a link, make it a URL
+    //what to make a link:
+        //http
+        //.com, .org, .edu, .net, .gov, .int, .mil, .us
+    var link = findLinks(data.description);
+    var map = 'http://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&sensor=false';
 
     var newTile=$("<div class='tile "+data.id+"'>"
         +"<div class='cover' style= 'background-image: url("+data.cover.source+");'>"
@@ -109,18 +113,18 @@ function displayEvent(data)
         +"</div>"
         +"<div class='lower'>"
             +"<div class='location'>"
-                +"<span class='venue'><u>"+theLocation+"</u></span>"
+                +"<span class='venue'>"+theLocation+"</span>"
                 +"<span class='location'>"+theAddress+"</span>"
             +"</div>"
             +"<div class='time'>"
-                +"<span class='from'>"+start_time+"</span> to "
+                +"<span class='from'>"+start_time+"</span>"
                 +"<span class='to'>"+end_time+"</span>"
             +"</div>"
         +"</div>"
         +"<div class='details'>"
-                +"<div  class='description'>"
-                    +data.description
-                    +"</div>"
+                +"<div  class='description'>
+                    <img src="+map+">
+                    </div>"
                 +"<div class='map_canvas'></div>"
         +"</div>");
 
@@ -134,12 +138,35 @@ function showmap() //LARRY
 
 function formatTime(time) { //LARRY
     console.log(time);
-    var result = time.split("-");
-    console.log(result);
+    var month = time.split("-");
+    var theMonth = trimNumber(month[1]);
+    console.log(theMonth);
+    var dayAndTime = month[2].split("T");
+    console.log(dayAndTime[1]);
+    var theTime = dayAndTime[1].split(":");
+    var militaryTime = theTime[0]+theTime[1];
+    theTime = getFormattedTime(militaryTime);
+    return theMonth + "/" + dayAndTime[0] + " @ " + theTime;
+}
 
-    //TODO
-        //format the content to look like 04/17 @ 7pm
+function trimNumber(s) {
+    while (s.substr(0,1) == '0' && s.length>1) { 
+        s = s.substr(1,2); 
+    }
+    return s;
+};
 
-    return result[1];
+function getFormattedTime(fourDigitTime) {
+    var hours24 = parseInt(fourDigitTime.substring(0, 2),10);
+    var hours = ((hours24 + 11) % 12) + 1;
+    var amPm = hours24 > 11 ? 'pm' : 'am';
+    var minutes = fourDigitTime.substring(2);
+    return hours + ':' + minutes + amPm;
+};
+
+function findLinks (description) { //LARRY
+    //var potentialLink = data.description.search("http")
+    //var linkWords = (["http", ".com", ".org", ".edu", ".net", ".gov", ".int", ".mil", ".us"]);
 
 }
+
