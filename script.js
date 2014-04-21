@@ -7,6 +7,15 @@ $( document ).ready( function() {
     }
     scale();
     $('.tile').click(function(){clicked($(this));});
+    console.log('hi')
+
+    new GMaps({
+      div: '.map_canvas.517895558333076',
+      lat: -12.043333,
+      lng: -77.028333
+    });
+    console.log('hi')
+
 });
 //TODOS
     //HOME PAGE
@@ -91,6 +100,10 @@ function displayEvent(data)
         end_time = " to " + formatTime(data.end_time);
     }
 
+    //var map
+
+
+
     //anytime I see something like a link, make it a URL in the content
     //console.log(data.description);
 
@@ -121,16 +134,15 @@ function displayEvent(data)
                 +"<div class='description'>"
                 +data.description
                 +"</div>"
-                +"<div class='map_canvas'></div>"
+                +"<div class='map_canvas "+data.id+"'></div>"
         +"</div>");
 
     $("#content").append(newTile)
 }
 
-function showmap() //LARRY
-{
 
-}
+    
+
 
 function formatTime(time) { //LARRY-Date.parse() TODO
     console.log(time);
@@ -166,6 +178,7 @@ function getFormattedTime(fourDigitTime) {
 function findLinks (description) { //LARRY
     //var potentialLink = data.description.search("http")
     //var linkWords = (["http", ".com", ".org", ".edu", ".net", ".gov", ".int", ".mil", ".us"]);
-
 }
+
+
 
