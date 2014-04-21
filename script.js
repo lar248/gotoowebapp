@@ -77,13 +77,9 @@ function displayEvent(data)
         theAddress += " " +data.venue.street + ", " +data.venue.city + ", " +data.venue.country;
     } else if (data.venue.street != undefined && data.venue.street != "") {
         theAddress += " " +data.venue.street;
-    } else if (data.venue.city != undefined && data.venue.country != undefined) {
-        theAddress += " " +data.venue.city + ", " +data.venue.country;
     } else if (data.venue.city != undefined) {
         theAddress += " " +data.venue.city;
-    } else if (data.venue.city != undefined) {
-        theAddress += " " +data.venue.country;
-    }
+    } 
 
     // var time
     var start_time = "";
@@ -96,13 +92,13 @@ function displayEvent(data)
     }
 
     //anytime I see something like a link, make it a URL in the content
-    console.log(data.description);
+    //console.log(data.description);
 
     //what to make a link:
         //http
         //.com, .org, .edu, .net, .gov, .int, .mil, .us
-    var link = findLinks(data.description);
-    var map = 'http://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&sensor=false';
+    //var link = findLinks(data.description);
+    //var map = 'http://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&sensor=false';
 
     var newTile=$("<div class='tile "+data.id+"'>"
         +"<div class='cover' style= 'background-image: url("+data.cover.source+");'>"
@@ -122,9 +118,9 @@ function displayEvent(data)
             +"</div>"
         +"</div>"
         +"<div class='details'>"
-                +"<div  class='description'>
-                    <img src="+map+">
-                    </div>"
+                +"<div class='description'>"
+                +data.description
+                +"</div>"
                 +"<div class='map_canvas'></div>"
         +"</div>");
 
@@ -136,8 +132,9 @@ function showmap() //LARRY
 
 }
 
-function formatTime(time) { //LARRY
+function formatTime(time) { //LARRY-Date.parse() TODO
     console.log(time);
+    console.log(Date.parse(time));
     var month = time.split("-");
     var theMonth = trimNumber(month[1]);
     console.log(theMonth);
@@ -146,6 +143,8 @@ function formatTime(time) { //LARRY
     var theTime = dayAndTime[1].split(":");
     var militaryTime = theTime[0]+theTime[1];
     theTime = getFormattedTime(militaryTime);
+
+
     return theMonth + "/" + dayAndTime[0] + " @ " + theTime;
 }
 
