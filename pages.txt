@@ -1,2 +1,2 @@
-CornellHillel
-dansmallspresents
+/CornellHillel/events
+/dansmallspresents/events
