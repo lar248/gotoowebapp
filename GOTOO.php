@@ -7,7 +7,9 @@
 
 	<script src='http://code.jquery.com/jquery-1.11.0.min.js'></script>
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
-	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+	<script src="gmaps.js"></script>
 	
 	<!--get the event list (pass to js)-->
 	<?php require_once("getEvents.php"); ?>

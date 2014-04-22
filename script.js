@@ -7,14 +7,19 @@ $( document ).ready( function() {
     }
     scale();
     $('.tile').click(function(){clicked($(this));});
-    console.log('hi')
 
-    new GMaps({
-      div: '.map_canvas.517895558333076',
-      lat: -12.043333,
-      lng: -77.028333
+    var map = new GMaps({
+        div: '.map_canvas',
+        lat: 51.5073346,
+        lng: -0.1276831,
+        zoom: 12,
+        zoomControl : true,
+        zoomControlOpt: {
+            style : 'SMALL',
+            position: 'TOP_LEFT'
+        },
+        panControl : false,
     });
-    console.log('hi')
 
 });
 //TODOS
@@ -134,30 +139,19 @@ function displayEvent(data)
                 +"<div class='description'>"
                 +data.description
                 +"</div>"
-                +"<div class='map_canvas "+data.id+"'></div>"
+                +"<div class='map_canvas'></div>"
         +"</div>");
 
     $("#content").append(newTile)
 }
 
-
-    
-
-
 function formatTime(time) { //LARRY-Date.parse() TODO
-    console.log(time);
-    console.log(Date.parse(time));
-    var month = time.split("-");
-    var theMonth = trimNumber(month[1]);
-    console.log(theMonth);
-    var dayAndTime = month[2].split("T");
-    console.log(dayAndTime[1]);
-    var theTime = dayAndTime[1].split(":");
-    var militaryTime = theTime[0]+theTime[1];
-    theTime = getFormattedTime(militaryTime);
-
-
-    return theMonth + "/" + dayAndTime[0] + " @ " + theTime;
+    var dateTime = Date.parse(time);
+    var date = new Date(dateTime);
+    var month = 1+date.getMonth();
+    var time = getFormattedTime(date.getHours(), date.getMinutes());
+    var day = date.getDate();
+    return month+ "/" + day + " @ " + time;
 }
 
 function trimNumber(s) {
@@ -167,11 +161,10 @@ function trimNumber(s) {
     return s;
 };
 
-function getFormattedTime(fourDigitTime) {
-    var hours24 = parseInt(fourDigitTime.substring(0, 2),10);
-    var hours = ((hours24 + 11) % 12) + 1;
-    var amPm = hours24 > 11 ? 'pm' : 'am';
-    var minutes = fourDigitTime.substring(2);
+function getFormattedTime(hours, minutes) {
+    var hours = ((hours + 11) % 12) + 1;
+    var amPm = hours > 11 ? 'pm' : 'am';
+    if (minutes == 0) {minutes='00';}
     return hours + ':' + minutes + amPm;
 };
 
