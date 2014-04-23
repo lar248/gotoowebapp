@@ -3,8 +3,13 @@
 <head>
 	<link href='style.css' rel='stylesheet' type='text/css'>
 	<script src='http://code.jquery.com/jquery-1.11.0.min.js'></script>
+
+	<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+	<script src="https://rawgithub.com/HPNeo/gmaps/master/gmaps.js"></script>
+
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
-	<script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+	
+	
 	<!--get the event list (pass to js)-->
 	<?php require_once("getEvents.php"); ?>
 	<!--scale content to screen-->
@@ -16,7 +21,6 @@
 
 <html>
 <body>
-	<div id='larrychange'></div>
 
 	<!--navBar Larry-->
 

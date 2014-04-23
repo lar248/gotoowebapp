@@ -27,13 +27,18 @@ body
 {
 	width:2em;
 	height:2em;
-	position:relative;
-	top:-1.1em;
-	left:-1em;
+	position:inherit;
+	top:.3em;
+	left:82%;
 	float:right;
-	background-image:url("res/go.png");
-	background-size: 100%;
+	background-image:url("res/status.png");
+	background-size: 200%;
 }
+.going
+{
+	background-position:right;
+}
+
 .name
 {
 	color:white;
@@ -64,8 +69,6 @@ body
 {
 	padding:.5em;
 	padding-top:0em;
-	display:none;
-
 }
 .description
 {
@@ -76,10 +79,8 @@ body
 	margin-top: 1em;
 	width:15em;
 	height:10em;
-	background-color: green;
 	margin-left: 5%;
 	margin-right: 5%;
-
 }
 .gradient
 {

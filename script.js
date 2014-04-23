@@ -1,13 +1,21 @@
 
+var hash={};
 $( document ).ready( function() {
     //on click
     for (ind in events)
     {
+        //add missing geoinformation
+        hash[events[ind].id]=events[ind];
+
         displayEvent(events[ind]);
     }
+    console.log(hash);
     scale();
     $('.tile').click(function(){clicked($(this));});
 });
+
+
+
 //TODOS
     //HOME PAGE
         //MAKE SWAP-ATTEND WORK -GRONER
@@ -28,7 +36,6 @@ function clicked(curr)
         //if clicked on status
          if($(event.target).hasClass('status'))
         {
-            console.log('statusChange');
             //change attend state
             swapAttend(curr);
         }
@@ -37,18 +44,31 @@ function clicked(curr)
             //expand the tile
             var expOne=curr.children('.details');
             $('.details').not(expOne).slideUp();
+            var openning= !expOne.is(":visible")
             expOne.slideToggle();
-    }
+            //draw Map
+            if (openning)
+            {
+                var currID=curr.attr('id');
+                    new GMaps({
+                        div: '#map_'+currID,
+                        lat: hash[currID].venue.latitude,
+                        lng: hash[currID].venue.longitude
+                });
+            }
+        }
 }
 
-function swapAttend(id) //GRONER
+
+
+
+function swapAttend(curr) //GRONER
     {
-        var status=$('.'+id).children('.cover').children('.gradient').children('.status');
-        var state= status.css("background-image");
-        if(state=="url(file:///Users/adamgroner/Documents/go2/res/go.png)")
-            status.css("background-image","url(res/check.png)");
-        else
-            status.css("background-image","url(res/go.png)");
+        var status=curr.find('.status');
+        status.toggleClass('going');
+        if(status.hasClass('going'))
+        {
+        }
         //save state to cache
             //get event id get state
             //if going
@@ -63,8 +83,6 @@ function getAttend() //GRONER
 
 function displayEvent(data)
 {
-    console.log(data);
-
     // var location
     var theLocation = "";
     var theAddress = "";
@@ -79,7 +97,7 @@ function displayEvent(data)
         theAddress += " " +data.venue.street;
     } else if (data.venue.city != undefined) {
         theAddress += " " +data.venue.city;
-    } 
+    }
 
     // var time
     var start_time = "";
@@ -91,6 +109,10 @@ function displayEvent(data)
         end_time = " to " + formatTime(data.end_time);
     }
 
+    //var map
+
+
+
     //anytime I see something like a link, make it a URL in the content
     //console.log(data.description);
 
@@ -100,7 +122,7 @@ function displayEvent(data)
     //var link = findLinks(data.description);
     //var map = 'http://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&sensor=false';
 
-    var newTile=$("<div class='tile "+data.id+"'>"
+    var newTile=$("<div class='tile' id='"+data.id+"'>"
         +"<div class='cover' style= 'background-image: url("+data.cover.source+");'>"
             +"<div class='gradient'>"
                 +"<div class='name'>"+data.name+"</div>"
@@ -121,16 +143,17 @@ function displayEvent(data)
                 +"<div class='description'>"
                 +data.description
                 +"</div>"
-                +"<div class='map_canvas'></div>"
+                +"<div class='map_canvas' id='map_"+data.id+"' long='"+data.venue.longitude+"' lat='"+data.venue.latitude+"'></div>"
         +"</div>");
 
     $("#content").append(newTile)
+       $(".details").hide();
+ 
 }
 
-function showmap() //LARRY
-{
 
-}
+    
+
 
 function formatTime(time) { //LARRY-Date.parse() TODO
     console.log(time);
@@ -166,6 +189,7 @@ function getFormattedTime(fourDigitTime) {
 function findLinks (description) { //LARRY
     //var potentialLink = data.description.search("http")
     //var linkWords = (["http", ".com", ".org", ".edu", ".net", ".gov", ".int", ".mil", ".us"]);
-
 }
+
+
 
