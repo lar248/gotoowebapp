@@ -48,13 +48,36 @@ function clicked(curr)
             if (openning)
             {
                 var currID=curr.attr('id');
+                if(hash[currID].venue.latitude!=undefined)
+                {    
                     new GMaps({
                         div: '#map_'+currID,
                         lat: hash[currID].venue.latitude,
                         lng: hash[currID].venue.longitude
-                });
+                    });
+                }
+                else
+                {
+                    console.log("INELSE: "+ hash[currID].location)
+
+                    GMaps.geocode({
+                          address: hash[currID].venue.name+",Ithaca, NY",
+                          callback: function(results, status) {
+                            console.log(status)
+
+                            if (status == 'OK') {
+                              var latlng = results[0].geometry.location;
+                            new GMaps({
+                                div: '#map_'+currID,
+                                lat: latlng.lat(),
+                                lng: latlng.lng()
+                            });
+                            }
+                        }
+                    });
             }
-        }
+        }       
+    }
 }
 
 
