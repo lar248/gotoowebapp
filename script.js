@@ -14,8 +14,6 @@ $( document ).ready( function() {
     $('.tile').click(function(){clicked($(this));});
 });
 
-
-
 //TODOS
     //HOME PAGE
         //MAKE SWAP-ATTEND WORK -GRONER
@@ -143,7 +141,7 @@ function displayEvent(data)
                 +"<div class='description'>"
                 +data.description
                 +"</div>"
-                +"<div class='map_canvas' id='map_"+data.id+"' long='"+data.venue.longitude+"' lat='"+data.venue.latitude+"'></div>"
+                +"<div class='map_canvas' id='map_"+data.id+"' ></div>"
         +"</div>");
 
     $("#content").append(newTile)
@@ -151,24 +149,13 @@ function displayEvent(data)
  
 }
 
-
-    
-
-
 function formatTime(time) { //LARRY-Date.parse() TODO
-    console.log(time);
-    console.log(Date.parse(time));
-    var month = time.split("-");
-    var theMonth = trimNumber(month[1]);
-    console.log(theMonth);
-    var dayAndTime = month[2].split("T");
-    console.log(dayAndTime[1]);
-    var theTime = dayAndTime[1].split(":");
-    var militaryTime = theTime[0]+theTime[1];
-    theTime = getFormattedTime(militaryTime);
-
-
-    return theMonth + "/" + dayAndTime[0] + " @ " + theTime;
+    var dateTime = Date.parse(time);
+    var date = new Date(dateTime);
+    var month = 1+date.getMonth();
+    var time = getFormattedTime(date.getHours(), date.getMinutes());
+    var day = date.getDate();
+    return month+ "/" + day + " @ " + time;
 }
 
 function trimNumber(s) {
@@ -178,11 +165,10 @@ function trimNumber(s) {
     return s;
 };
 
-function getFormattedTime(fourDigitTime) {
-    var hours24 = parseInt(fourDigitTime.substring(0, 2),10);
-    var hours = ((hours24 + 11) % 12) + 1;
-    var amPm = hours24 > 11 ? 'pm' : 'am';
-    var minutes = fourDigitTime.substring(2);
+function getFormattedTime(hours, minutes) {
+    var hours = ((hours + 11) % 12) + 1;
+    var amPm = hours > 11 ? 'pm' : 'am';
+    if (minutes == 0) {minutes='00';}
     return hours + ':' + minutes + amPm;
 };
 
