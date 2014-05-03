@@ -1,25 +1,33 @@
 
+function set(key, obj) {
+    return localStorage.setItem(key, JSON.stringify(obj))
+}
+function get(key) {
+    return JSON.parse(localStorage.getItem(key));
+}
 var hash={};
 $( document ).ready( function() {
+    init();
+    drawCal();
     //on click
     for (ind in events)
     {
         //add missing geoinformation
         hash[events[ind].id]=events[ind];
-
         displayEvent(events[ind]);
     }
-    console.log(hash);
+    console.log("HASH: "+hash);
     scale();
     $('.tile').click(function(){clicked($(this));});
 });
-
+function init()
+{
+var going=get('attending');
+if (going==null)
+    set('attending',[]);
+}
 //TODOS
     //HOME PAGE
-        //MAKE SWAP-ATTEND WORK -GRONER
-        //MAKE SWAP-ATTEND RECORD AND PERSIST -GRONER
-        
-    
         //GET MAP WORKING -LAR
         //FORMAT TILES -LAR
             //TICKET FUNCTIONALITY-ICON WRAPPED IN <A> -LAR
@@ -31,76 +39,106 @@ $( document ).ready( function() {
 
 function clicked(curr)
 {
-        //if clicked on status
-         if($(event.target).hasClass('status'))
+    //if clicked on status
+    if($(event.target).hasClass('status'))
+        //change attend state
+        swapAttend(curr);
+    else
+    {
+        //expand the tile
+        var expOne=curr.children('.details');
+        $('.details').not(expOne).slideUp();
+        var openning= !expOne.is(":visible")
+        expOne.slideToggle();
+        //draw Map
+        if (openning)
         {
-            //change attend state
-            swapAttend(curr);
-        }
-         else
-         {
-            //expand the tile
-            var expOne=curr.children('.details');
-            $('.details').not(expOne).slideUp();
-            var openning= !expOne.is(":visible")
-            expOne.slideToggle();
-            //draw Map
-            if (openning)
+            var currID=curr.attr('id');
+            if(hash[currID].venue.latitude!=undefined)
+            {    
+                new GMaps({
+                    div: '#map_'+currID,
+                    lat: hash[currID].venue.latitude,
+                    lng: hash[currID].venue.longitude
+                });
+            }
+            else
             {
-                var currID=curr.attr('id');
-                if(hash[currID].venue.latitude!=undefined)
-                {    
-                    new GMaps({
-                        div: '#map_'+currID,
-                        lat: hash[currID].venue.latitude,
-                        lng: hash[currID].venue.longitude
-                    });
-                }
-                else
-                {
-                    console.log("INELSE: "+ hash[currID].location)
-
-                    GMaps.geocode({
-                          address: hash[currID].venue.name+",Ithaca, NY",
-                          callback: function(results, status) {
-                            console.log(status)
-
-                            if (status == 'OK') {
-                              var latlng = results[0].geometry.location;
-                            new GMaps({
-                                div: '#map_'+currID,
-                                lat: latlng.lat(),
-                                lng: latlng.lng()
-                            });
-                            }
+                GMaps.geocode({
+                      address: hash[currID].venue.name+",Ithaca, NY",
+                      callback: function(results, status) {
+                        if (status == 'OK') {
+                          var latlng = results[0].geometry.location;
+                        new GMaps({
+                            div: '#map_'+currID,
+                            lat: latlng.lat(),
+                            lng: latlng.lng()
+                        });
                         }
-                    });
+                    }
+                });
             }
         }       
     }
 }
 
 
-
-
-function swapAttend(curr) //GRONER
-    {
-        var status=curr.find('.status');
-        status.toggleClass('going');
-        if(status.hasClass('going'))
-        {
-        }
-        //save state to cache
-            //get event id get state
-            //if going
-            //add id->state
-    }
-//get all when page loads
-function getAttend() //GRONER
+function drawCal()
 {
+    var today=new Date();
+    var sunday=new Date();
+    sunday.setDate(today.getDate() - today.getDay())
+    for (var i=0;i<7;i++)
+    {
+        var curr=new Date();
+        curr.setDate(sunday.getDate()+i)
+        if(curr>=today)
+        $("#dayval_"+i).html(curr.getMonth()+"/"+curr.getDate())
+        if(curr.getDay()==today.getDay())
+            $("#dayval_"+i).addClass("selected")
+    }
+    writeDate();
+
+$('.dates').live("click",function() {
+    $('.dates').each(function() {
+            if($(this).attr('id')=='datesCurr')
+                $(this).animate({left: '-100%'}, 500 );
+            if($(this).attr('id')=='datesNext')
+            $(this).animate({left: '0%'}, 500 );
+    });
+});
+
 
 }
+function writeDate()
+{
+    var monthNames = ["", "JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER" ];
+    var dayNames = ["SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY"];
+    var monthDay=$('.selected').html().split("/");
+    var NUM = monthNames[monthDay[0]]
+    var MONTH = monthDay[1]
+    var DAY = dayNames[$('.selected').attr("id").split("_")[1]]
+    $('#fulldate').html(DAY+", "+MONTH+" "+NUM);
+}
 
+function swapAttend(curr) //GRONER
+{
+    var id=curr.attr('id')
+    var status=curr.find('.status');
+    status.toggleClass('going');
+    if(status.hasClass('going'))
+    {
+        var update=get('attending');
+        update.push(id);
+        set('attending', update);
+    }
+    else
+    {
+        var currAtt=get('attending');
+        currAtt.splice(currAtt.indexOf(id,1))
+        set('attending', currAtt);
+    }
+}
 
 function displayEvent(data)
 {
@@ -142,12 +180,15 @@ function displayEvent(data)
         //.com, .org, .edu, .net, .gov, .int, .mil, .us
     //var link = findLinks(data.description);
     //var map = 'http://maps.googleapis.com/maps/api/staticmap?center=Brooklyn+Bridge,New+York,NY&zoom=13&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:C%7C40.718217,-73.998284&sensor=false';
+    var going=''
+    if (get('attending').indexOf(data.id)!=-1)
+        going=' going';
 
     var newTile=$("<div class='tile' id='"+data.id+"'>"
         +"<div class='cover' style= 'background-image: url("+data.cover.source+");'>"
             +"<div class='gradient'>"
                 +"<div class='name'>"+data.name+"</div>"
-                +"<div class='status'> </div>"
+                +"<div class='status"+going+"'> </div>"
             +"</div>"
         +"</div>"
         +"<div class='lower'>"
