@@ -108,6 +108,23 @@ $('.dates').live("click",function() {
     });
 });
 
+$('.navIcon').on('click', function() {
+    $('.navIcon').removeClass('navIconClicked');
+    console.log("we made it in");
+    var icon = $(this).attr("id");
+    $(this).addClass('navIconClicked');
+    
+    if ($(this).attr("id")=='navAll') {
+        console.log('poop1'+$(this).attr("id"));
+        $('#top-pane').html("<img class='insidePane' src='res/ALL.png'/>");
+    } else if ($(this).attr("id")=='navGoing') {
+        console.log('poop2'+$(this).attr("id"));
+        $('#top-pane').html("<img class='insidePane' src='res/ATT.png'/>");
+    } else if ($(this).attr("id")=='navRec') {
+        console.log('poop3'+$(this).attr("id"));
+        $('#top-pane').html("<img class='insidePane' src='res/rec.png'/>");
+    }
+});
 
 }
 function writeDate()
@@ -139,6 +156,8 @@ function swapAttend(curr) //GRONER
         set('attending', currAtt);
     }
 }
+
+
 
 function displayEvent(data)
 {

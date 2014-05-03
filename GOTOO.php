@@ -2,8 +2,9 @@
 <!DOCTYPE html>
 <head>
 	<link href='style.css' rel='stylesheet' type='text/css'>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src='http://code.jquery.com/jquery-1.11.0.min.js'></script>
-
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">
 	<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
 	<script src="https://rawgithub.com/HPNeo/gmaps/master/gmaps.js"></script>
 	<script src="jquery.storageapi.js"></script>
@@ -25,6 +26,25 @@
 
 <html>
 <body>
+	<div id="top-pane">
+	</div>
+	<div id="ui-navbar">
+		<div class='navIcon' id='navAll'>
+			<a href="#" ><img id='icon' src='res/ICONall.png'/></a>
+		</div>
+
+		<div class='navIcon' id='navGoing'>
+			<div class='navIcon' id='vertLine1'> </div>
+			<a href="#"><img id='icon' src='res/ICONgoing.png'/></a>
+		</div>
+		<div class='navIcon' id='navRec'>
+			<div class='navIcon' id='vertLine1'> </div>
+       		<a href="#"><img id='icon' src='res/ICONrec.png'/></a>
+       	</div>
+	</div>
+
+	    
+
 	<div id='cal'>
 		<div id='labels'>
 		    <span class='daylabel'>Su</span>
